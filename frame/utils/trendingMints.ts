@@ -73,17 +73,17 @@ export async function extractImageFromTokenNfts(data: any[]) {
   return updatedData;
 }
 
-// export async function fetchDataAndProcess() {
-//   const trendingMintsData = await getTrendingMintsOnFarcaster();
-//   const unsortedData = await processTrendingMints(trendingMintsData);
-//   const sortedData = await sortAndFilterTrendingMints(unsortedData);
-//   const data = await extractImageFromTokenNfts(sortedData);
-//   console.log(data);
-//   return data;
-// }
+export async function fetchDataAndProcess() {
+  const trendingMintsData = await getTrendingMintsOnFarcaster();
+  const unsortedData = await processTrendingMints(trendingMintsData);
+  const sortedData = await sortAndFilterTrendingMints(unsortedData);
+  const data = await extractImageFromTokenNfts(sortedData);
+  console.log(data);
+  return data;
+}
 
 function fetchABI(address: string) {
-  const apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.ETHERSCAN_API_KEY}`;
+  const apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`;
 
   return new Promise((resolve, reject) => {
     const req = http.get(apiUrl, (res: any) => {
