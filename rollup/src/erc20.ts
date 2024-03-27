@@ -1,19 +1,19 @@
 import { MicroRollup } from "@stackr/sdk";
 import { stackrConfig } from "../stackr.config.ts";
 
-import { createAccountSchema, schemas } from "./actions.ts";
-import { erc20StateMachine } from "./machines.stackr.ts";
+import { mintSchema, schemas } from "./actions.ts";
+import { RadarStateMachine } from "./machines.stackr.ts";
 
-type ERC20Machine = typeof erc20StateMachine;
+type RadarMachine = typeof RadarStateMachine;
 
 const mru = await MicroRollup({
   config: stackrConfig,
-  actions: [createAccountSchema, ...Object.values(schemas)],
+  actions: [mintSchema, ...Object.values(schemas)],
   isSandbox: true,
 });
 
-mru.stateMachines.add(erc20StateMachine);
+mru.stateMachines.add(RadarStateMachine);
 
 await mru.init();
 
-export { ERC20Machine, mru };
+export { RadarMachine, mru };

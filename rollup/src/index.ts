@@ -3,12 +3,12 @@ import express, { Request, Response } from "express";
 import { ActionEvents } from "@stackr/sdk";
 import { Playground } from "@stackr/sdk/plugins";
 import { schemas } from "./actions.ts";
-import { ERC20Machine, mru } from "./erc20.ts";
+import { RadarMachine, mru } from "./erc20.ts";
 import { reducers } from "./reducers.ts";
 
 console.log("Starting server...");
 
-const erc20Machine = mru.stateMachines.get<ERC20Machine>("erc-20");
+const radarMachine = mru.stateMachines.get<RadarMachine>("radar");
 
 const app = express();
 app.use(express.json());
@@ -80,7 +80,7 @@ events.subscribe(ActionEvents.EXECUTION_STATUS, async (action) => {
 });
 
 app.get("/", (_req: Request, res: Response) => {
-  return res.send({ state: erc20Machine?.state.unwrap() });
+  return res.send({ state: radarMachine?.state.unwrap() });
 });
 
 app.listen(3001, () => {

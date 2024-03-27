@@ -2,14 +2,23 @@ import { State } from "@stackr/sdk/machine";
 import { BytesLike, ZeroHash, solidityPackedKeccak256 } from "ethers";
 import { MerkleTree } from "merkletreejs";
 
+// export type Leaves = {
+//   tokenMinted: string;
+//   tokenData: {
+//     amountOfToken: number;
+//     address: string[];
+//   };
+// }[];
+
 export type Leaves = {
-  address: string;
-  balance: number;
-  nonce: number;
-  allowances: {
-    address: string;
-    amount: number;
-  }[];
+  tokenMinted: string;
+  tokenData: {
+    TotalAmountToken: number;
+    Transactions : {
+      address: string;
+      amountOfToken: number;
+    }[];
+  };
 }[];
 
 export class BetterMerkleTree {
@@ -24,15 +33,15 @@ export class BetterMerkleTree {
   createTree(leaves: Leaves) {
     const hashedLeaves = leaves.map((leaf) => {
       return solidityPackedKeccak256(
-        ["address", "uint256", "uint256"],
-        [leaf.address, leaf.balance, leaf.nonce]
+        ["address"],
+        [leaf.tokenMinted]
       );
     });
     return new MerkleTree(hashedLeaves);
   }
 }
 
-export class ERC20 extends State<Leaves, BetterMerkleTree> {
+export class Radar extends State<Leaves, BetterMerkleTree> {
   constructor(state: Leaves) {
     super(state);
   }
@@ -43,7 +52,7 @@ export class ERC20 extends State<Leaves, BetterMerkleTree> {
   }
 
   clone(): State<Leaves, BetterMerkleTree> {
-    return new ERC20(this.unwrap());
+    return new Radar(this.unwrap());
   }
 
   unwrap(): Leaves {
