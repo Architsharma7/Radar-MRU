@@ -3,13 +3,13 @@ import { createFrames, Button } from "frames.js/next";
 
 const frames = createFrames();
 
-const handleRequest = frames(async (ctx) => {
+const handleRequest = frames(async() => {
   return {
     image: `https://gateway.lighthouse.storage/ipfs/QmTyUxFsKXNwLfgGc5MLXXzcMGszDEKrCSGqNbC4HzNQqe`,
     buttons: [
       <Button
         action="post"
-        target={`${process.env.HOST}/api/frames/getTrendingMints`}
+        target={`https://e594-110-235-234-38.ngrok-free.app/api/frames/getTrendingMints`}
       >
         Get the Trending Mints →
       </Button>,
