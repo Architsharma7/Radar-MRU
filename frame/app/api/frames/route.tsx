@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { createFrames, Button } from "frames.js/next";
+import { framesjsMiddleware } from "frames.js/middleware";
 
 const frames = createFrames();
 
@@ -9,7 +10,7 @@ const handleRequest = frames(async() => {
     buttons: [
       <Button
         action="post"
-        target={`https://e594-110-235-234-38.ngrok-free.app/api/frames/getTrendingMints`}
+        target={`https://0bbc-110-235-234-28.ngrok-free.app/api/frames/getTrendingMints`}
       >
         Get the Trending Mints →
       </Button>,

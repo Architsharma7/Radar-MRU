@@ -16,7 +16,7 @@ const walletTwo = new Wallet(
 const getBody = async (actionName: ActionName, wallet: Wallet) => {
   const walletAddress = wallet.address;
   const payload =
-    actionName === "create"
+    actionName === "mint"
       ? {
           address: walletAddress,
         }

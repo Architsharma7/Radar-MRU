@@ -43,6 +43,15 @@ app.get("/blocks/:hash", async (req: Request, res: Response) => {
   return res.send(block.data);
 });
 
+type ActionName = keyof typeof schemas;
+
+app.get("/getEIP712Types/:action", (_req: Request, res: Response) => {
+  //@ts-ignore
+  const { action }: { action: ActionName } = _req.params;
+  const eip712Types = schemas[action].EIP712TypedData.types;
+  return res.send({ eip712Types });
+});
+
 app.post("/:actionName", async (req: Request, res: Response) => {
   const { actionName } = req.params;
   const actionReducer = reducers[actionName];
@@ -65,6 +74,8 @@ app.post("/:actionName", async (req: Request, res: Response) => {
     const newAction = schema.newAction({ msgSender, signature, payload });
     const ack = await mru.submitAction(actionName, newAction);
     res.status(201).send({ ack });
+    console.log(msgSender, signature, payload);
+    console.log(schema);
   } catch (e: any) {
     res.status(400).send({ error: e.message });
   }

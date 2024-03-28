@@ -15,15 +15,20 @@ export async function getResponse(
   const json = await req.json();
 
   const frameMessage = await getFrameMessage(json);
+  console.log(frameMessage)
 
   if (!frameMessage) {
     throw new Error("No frame message");
   }
 
+  const address = "0x69697DdF8dB1cDbfA87Ad91D6E603aDb01493006"
+  const amount = BigInt(1);
+  const tokenaddress = Tokenaddress;
+
   const data = encodeFunctionData({
     abi: ABI,
     functionName: "mint",
-    args: ["0x69697DdF8dB1cDbfA87Ad91D6E603aDb01493006", BigInt(1)],
+    args: [address, amount],
   });
 
   const txData: FrameTransactionResponse = {
