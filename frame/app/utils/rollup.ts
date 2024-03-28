@@ -8,7 +8,13 @@ const domain = {
   salt: "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
 };
 
-export const createMintActions = async(mintData: any) => {
+type mintDataType = {
+    address: string,
+    tokenMinted: string,
+    amountOfToken: number,
+}
+
+export const createMintActions = async(mintData:mintDataType) => {
   const wallet = Wallet.createRandom();
   const actionName = "mint";
   const date = new Date();

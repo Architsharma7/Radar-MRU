@@ -2,9 +2,7 @@ import { STORAGE_REGISTRY_ADDRESS } from "@farcaster/core";
 import { TransactionTargetResponse } from "frames.js";
 import { getFrameMessage } from "frames.js/next/server";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  encodeFunctionData,
-} from "viem";
+import { encodeFunctionData } from "viem";
 import { sepolia, baseSepolia } from "viem/chains";
 import { ABI, Tokenaddress } from "../../constants";
 import type { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
@@ -12,16 +10,16 @@ import type { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 export async function getResponse(
   req: NextRequest
 ): Promise<NextResponse<TransactionTargetResponse>> {
-  const json = await req.json();
+  const searchParams = new URLSearchParams(req.nextUrl.search);
+  const useraddress = searchParams.get('address') || '';
+  const tokenMinted = searchParams.get('tokenMinted') || '';
+  const amountOfToken = searchParams.get('amountOfToken') || '';
 
-  const frameMessage = await getFrameMessage(json);
-  console.log(frameMessage)
-
-  if (!frameMessage) {
-    throw new Error("No frame message");
+  if (! useraddress || ! tokenMinted || ! amountOfToken) {
+    throw new Error("search params not transfered to tx route");
   }
 
-  const address = "0x69697DdF8dB1cDbfA87Ad91D6E603aDb01493006"
+  const address = "0x69697DdF8dB1cDbfA87Ad91D6E603aDb01493006";
   const amount = BigInt(1);
   const tokenaddress = Tokenaddress;
 
@@ -50,4 +48,4 @@ export async function POST(req: NextRequest): Promise<Response> {
   return getResponse(req);
 }
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
