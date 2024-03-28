@@ -2,23 +2,13 @@ import { State } from "@stackr/sdk/machine";
 import { BytesLike, ZeroHash, solidityPackedKeccak256 } from "ethers";
 import { MerkleTree } from "merkletreejs";
 
-// export type Leaves = {
-//   tokenMinted: string;
-//   tokenData: {
-//     amountOfToken: number;
-//     address: string[];
-//   };
-// }[];
-
 export type Leaves = {
   tokenMinted: string;
-  tokenData: {
-    TotalAmountToken: number;
-    Transactions : {
-      address: string;
-      amountOfToken: number;
-    }[];
-  };
+  TotalAmountToken: number;
+  Transactions: {
+    address: string;
+    amountOfToken: number;
+  }[];
 }[];
 
 export class BetterMerkleTree {
@@ -32,12 +22,11 @@ export class BetterMerkleTree {
 
   createTree(leaves: Leaves) {
     const hashedLeaves = leaves.map((leaf) => {
-      return solidityPackedKeccak256(
-        ["address"],
-        [leaf.tokenMinted]
-      );
+      const transactionTree = new MerkleTree(leaf.Transactions,solidityPackedKeccak256);
+      const txTreeRoot = transactionTree.getHexRoot();
+      return solidityPackedKeccak256(["address","uint","bytes"], [leaf.tokenMinted, leaf.TotalAmountToken, txTreeRoot]);
     });
-    return new MerkleTree(hashedLeaves);
+    return new MerkleTree(hashedLeaves,solidityPackedKeccak256);
   }
 }
 
