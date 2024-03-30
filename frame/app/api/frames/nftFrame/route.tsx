@@ -26,7 +26,7 @@ const handleRequest = frames(async (ctx) => {
         </Button>,
         <Button
           action="tx"
-          target={`https://0bbc-110-235-234-28.ngrok-free.app/api/tx`}
+          target={`https://0bbc-110-235-234-28.ngrok-free.app/api/tx?tokenMinted=${encodeURIComponent(data.tokenMinted)}&address=${encodeURIComponent(data.address)}&amountOfToken=${encodeURIComponent(data.amountOfToken)}`}
           post_url={`https://0bbc-110-235-234-28.ngrok-free.app/api/txConfirmation?tokenMinted=${encodeURIComponent(data.tokenMinted)}&address=${encodeURIComponent(data.address)}&amountOfToken=${encodeURIComponent(data.amountOfToken)}`}
           key={"9"}
         >

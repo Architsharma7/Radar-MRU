@@ -22,8 +22,12 @@ export class BetterMerkleTree {
 
   createTree(leaves: Leaves) {
     const hashedLeaves = leaves.map((leaf) => {
-      const transactionTree = new MerkleTree(leaf.Transactions,solidityPackedKeccak256);
+      const hashedTransactions = leaf.Transactions.map((leaf)=> {
+        return solidityPackedKeccak256(["address", "uint"], [leaf.address, leaf.amountOfToken]);
+      })
+      const transactionTree = new MerkleTree(hashedTransactions,solidityPackedKeccak256);
       const txTreeRoot = transactionTree.getHexRoot();
+      console.log("txroot",txTreeRoot);
       return solidityPackedKeccak256(["address","uint","bytes"], [leaf.tokenMinted, leaf.TotalAmountToken, txTreeRoot]);
     });
     return new MerkleTree(hashedLeaves,solidityPackedKeccak256);
