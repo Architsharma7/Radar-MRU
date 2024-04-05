@@ -1,4 +1,4 @@
-import { Reducers, STF } from "@stackr/sdk/machine";
+import { Transitions, STF } from "@stackr/sdk/machine";
 import { Radar, BetterMerkleTree as StateWrapper } from "./state";
 
 // --------- Utilities ---------
@@ -35,6 +35,6 @@ const mintHandler: STF<Radar> = {
 };
 
 
-export const reducers: Reducers<Radar> = {
+export const transitions: Transitions<Radar> = {
   mint: mintHandler,
 };

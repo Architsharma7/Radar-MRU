@@ -22,15 +22,24 @@ export class BetterMerkleTree {
 
   createTree(leaves: Leaves) {
     const hashedLeaves = leaves.map((leaf) => {
-      const hashedTransactions = leaf.Transactions.map((leaf)=> {
-        return solidityPackedKeccak256(["address", "uint"], [leaf.address, leaf.amountOfToken]);
-      })
-      const transactionTree = new MerkleTree(hashedTransactions,solidityPackedKeccak256);
+      const hashedTransactions = leaf.Transactions.map((leaf) => {
+        return solidityPackedKeccak256(
+          ["address", "uint"],
+          [leaf.address, leaf.amountOfToken]
+        );
+      });
+      const transactionTree = new MerkleTree(
+        hashedTransactions,
+        solidityPackedKeccak256
+      );
       const txTreeRoot = transactionTree.getHexRoot();
-      console.log("txroot",txTreeRoot);
-      return solidityPackedKeccak256(["address","uint","bytes"], [leaf.tokenMinted, leaf.TotalAmountToken, txTreeRoot]);
+      console.log("txroot", txTreeRoot);
+      return solidityPackedKeccak256(
+        ["address", "uint", "bytes"],
+        [leaf.tokenMinted, leaf.TotalAmountToken, txTreeRoot]
+      );
     });
-    return new MerkleTree(hashedLeaves,solidityPackedKeccak256);
+    return new MerkleTree(hashedLeaves, solidityPackedKeccak256);
   }
 }
 
@@ -39,23 +48,22 @@ export class Radar extends State<Leaves, BetterMerkleTree> {
     super(state);
   }
 
-  wrap(state: Leaves): BetterMerkleTree {
-    const newTree = new BetterMerkleTree(state);
-    return newTree;
+  transformer() {
+    return {
+      wrap: () => {
+        const newTree = new BetterMerkleTree(this.state);
+        return newTree;
+      },
+      unwrap: (wrappedState: BetterMerkleTree) => {
+        return wrappedState.leaves;
+      },
+    };
   }
 
-  clone(): State<Leaves, BetterMerkleTree> {
-    return new Radar(this.unwrap());
-  }
-
-  unwrap(): Leaves {
-    return this.wrappedState.leaves;
-  }
-
-  calculateRoot(): BytesLike {
-    if (this.wrappedState.leaves.length === 0) {
+  getRootHash(): BytesLike {
+    if (this.state.length === 0) {
       return ZeroHash;
     }
-    return this.wrappedState.merkleTree.getHexRoot();
+    return this.transformer().wrap().merkleTree.getHexRoot();
   }
 }

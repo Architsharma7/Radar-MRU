@@ -1,6 +1,6 @@
 import { StateMachine } from "@stackr/sdk/machine";
 import genesisState from "../genesis-state.json";
-import { reducers } from "./reducers";
+import { transitions } from "./reducers";
 import { Radar } from "./state";
 
 const STATE_MACHINES = {
@@ -9,8 +9,9 @@ const STATE_MACHINES = {
 
 const RadarStateMachine = new StateMachine({
   id: STATE_MACHINES.Radar,
-  state: new Radar(genesisState.state),
-  on: reducers,
+  stateClass: Radar,
+  on: transitions,
+  initialState: genesisState.state,
 });
 
 export { STATE_MACHINES, RadarStateMachine };

@@ -8,11 +8,10 @@ type RadarMachine = typeof RadarStateMachine;
 
 const mru = await MicroRollup({
   config: stackrConfig,
-  actions: [mintSchema, ...Object.values(schemas)],
+  actionSchemas: [mintSchema, ...Object.values(schemas)],
   isSandbox: true,
+  stateMachines: [RadarStateMachine]
 });
-
-mru.stateMachines.add(RadarStateMachine);
 
 await mru.init();
 

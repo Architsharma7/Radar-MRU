@@ -19,11 +19,11 @@ export const createMintActions = async(mintData:mintDataType) => {
   const actionName = "mint";
   const date = new Date();
 
-  const payload = {
+  const inputs = {
     timestamp: Math.round(date.getTime() / 1000),
     ...mintData,
   };
-  console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
+  console.log(`Payload: ${JSON.stringify(inputs, null, 2)}`);
 
   const response = await fetch(
     `http://localhost:3001/getEIP712Types/${actionName}`
@@ -34,13 +34,13 @@ export const createMintActions = async(mintData:mintDataType) => {
   const signature = await wallet.signTypedData(
     domain,
     eip712Types,
-    payload
+    inputs
   );
   console.log(`Signature: ${signature}`);
   const body = JSON.stringify({
     msgSender: wallet.address,
     signature,
-    payload,
+    inputs,
   });
 
   const res = await fetch(`http://localhost:3001/${actionName}`, {

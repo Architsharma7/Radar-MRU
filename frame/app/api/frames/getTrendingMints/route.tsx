@@ -2,12 +2,13 @@ import { createFrames, Button } from "frames.js/next";
 
 const frames = createFrames();
 
-const handleRequest = frames(async () => {
+const handleRequest = frames(async (ctx) => {
   // const response = await fetch(`${process.env.HOST}/api/findTrending`);
   // const data = await response.json();
   // console.log(data);
 
   const data = "hello";
+  const arr = [1, 2, 3];
 
   if (!data) {
     fetch(`/api/findTrending`, {
@@ -53,61 +54,37 @@ const handleRequest = frames(async () => {
     // show nft lists
     return {
       image: (
-        <div tw="flex h-full w-full items-center justify-between bg-white">
+        <div tw="flex h-full w-full items-center justify-center flex-col bg-[#f9f7f2] ">
+          {/* <img
+            src="https://i.ibb.co/mGQKf0t/Grid.png"
+            alt="Grid-Pattern-1711814234821"
+            tw="absolute"
+          /> */}
           <div
-            style={{
-              backgroundImage: "linear-gradient(to top, #ffffff, #ebf4ff)",
-              width: 410,
-              height: 600,
-            }}
-            tw="flex flex-1 flex-col px-8"
+            style={{ fontWeight: "700", fontSize: "22px" }}
+            tw="flex bg-black text-white p-4 rounded-xl rounded-tl-none"
           >
-            <div tw="flex items-center justify-between mx-auto w-full">
-              <h4 style={{ fontWeight: 600 }} tw=" text-4xl text-indigo-500">
-                {"Trending Mints on Farcaster"}
-              </h4>
-            </div>
-            <div tw="flex items-center justify-around mx-auto w-full ">
-              <div tw="flex flex-col mx-auto justify-center items-center w-1/3 mx-1">
+            {" "}
+            Trending Mints on Farcaster
+          </div>
+          <div tw="flex mt-6 ">
+            {arr.map((item, index) => (
+              <div tw="flex flex-col items-center" key={index}>
                 <img
                   src={
-                    "https://pbs.twimg.com/profile_images/1732439974497394688/ezW7LwKq_400x400.jpg"
+                    "https://images.ctfassets.net/ohcexbfyr6py/4oCGZKmzbQeYjfg2OtuPA7/c5ed5f9fd84e827e8b7a2b5423b95fb0/The_Ethereum_Merge__ETH_2.0__explained.png"
                   }
                   alt="nft"
-                  tw="h-56 w-44 shadow-2xl border-2 border-blue-400"
+                  tw="h-44 w-44 shadow-2xl rounded-2xl rounded-bl-none border-white border-2 mx-3"
                 />
-                <h5 style={{ fontWeight: 600 }} tw="text-blue-600">
-                  {"hello"}
-                </h5>
-                <h5 tw="">{"1"}</h5>
+                <div
+                  style={{ fontWeight: "700", fontSize: "12px" }}
+                  tw="flex bg-black text-white p-3 rounded-none rounded-tl-lg rounded-br-lg items-center justify-center w-44 mt-3 shadom-xl border-white border-2"
+                >
+                  Token : {item}
+                </div>
               </div>
-              <div tw="flex flex-col mx-auto justify-center items-center w-1/3 mx-1">
-                <img
-                  src={
-                    "https://pbs.twimg.com/profile_images/1732439974497394688/ezW7LwKq_400x400.jpg"
-                  }
-                  alt="nft"
-                  tw="h-56 w-44 shadow-2xl border-2 border-blue-400"
-                />
-                <h5 style={{ fontWeight: 600 }} tw="text-blue-600">
-                  {"hello"}
-                </h5>
-                <h5 tw="">{"2"}</h5>
-              </div>
-              <div tw="flex flex-col mx-auto justify-center items-center w-1/3 mx-1">
-                <img
-                  src={
-                    "https://pbs.twimg.com/profile_images/1732439974497394688/ezW7LwKq_400x400.jpg"
-                  }
-                  alt="nft"
-                  tw="h-56 w-44 shadow-2xl border-2 border-blue-400"
-                />
-                <h5 style={{ fontWeight: 600 }} tw="text-blue-600">
-                  {"hello"}
-                </h5>
-                <h5 tw="">{"3"}</h5>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         // <img

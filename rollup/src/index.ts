@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
-
 import { ActionEvents } from "@stackr/sdk";
 import { Playground } from "@stackr/sdk/plugins";
 import { schemas } from "./actions.ts";
 import { RadarMachine, mru } from "./erc20.ts";
-import { reducers } from "./reducers.ts";
+import { transitions } from "./reducers.ts";
 
 console.log("Starting server...");
 
@@ -13,11 +12,10 @@ const radarMachine = mru.stateMachines.get<RadarMachine>("radar");
 const app = express();
 app.use(express.json());
 
-const playground = Playground.setup(mru);
+const playground = Playground.init(mru);
 
-playground.addMethodOnHttpServer(
-  "get",
-  "/hello",
+playground.addGetMethod(
+  "/custom/hello",
   async (_req: Request, res: Response) => {
     res.send("Hello World");
   }
@@ -54,7 +52,7 @@ app.get("/getEIP712Types/:action", (_req: Request, res: Response) => {
 
 app.post("/:actionName", async (req: Request, res: Response) => {
   const { actionName } = req.params;
-  const actionReducer = reducers[actionName];
+  const actionReducer = transitions[actionName];
 
   if (!actionReducer) {
     res.status(400).send({ message: "no reducer for action" });
@@ -62,19 +60,19 @@ app.post("/:actionName", async (req: Request, res: Response) => {
   }
   const action = actionName as keyof typeof schemas;
 
-  const { msgSender, signature, payload } = req.body as {
+  const { msgSender, signature, inputs } = req.body as {
     msgSender: string;
     signature: string;
-    payload: any;
+    inputs: any;
   };
 
   const schema = schemas[action];
 
   try {
-    const newAction = schema.newAction({ msgSender, signature, payload });
+    const newAction = schema.actionFrom({ msgSender, signature, inputs });
     const ack = await mru.submitAction(actionName, newAction);
     res.status(201).send({ ack });
-    console.log(msgSender, signature, payload);
+    console.log(msgSender, signature, inputs);
     console.log(schema);
   } catch (e: any) {
     res.status(400).send({ error: e.message });
@@ -91,7 +89,7 @@ events.subscribe(ActionEvents.EXECUTION_STATUS, async (action) => {
 });
 
 app.get("/", (_req: Request, res: Response) => {
-  return res.send({ state: radarMachine?.state.unwrap() });
+  return res.send({ state: radarMachine?.state });
 });
 
 app.listen(3001, () => {
