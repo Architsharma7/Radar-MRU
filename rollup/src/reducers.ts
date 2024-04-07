@@ -6,6 +6,12 @@ const findIndexOfMintedToken = (state: StateWrapper, tokenMinted: string) => {
   return state.leaves.findIndex((leaf) => leaf.tokenMinted === tokenMinted);
 };
 
+type tokenInputs = {
+  token: string;
+  criteriaCount: number;
+  isSpam: boolean;
+};
+
 // --------- State Transition Handlers ---------
 
 const mintHandler: STF<Radar> = {
@@ -34,7 +40,23 @@ const mintHandler: STF<Radar> = {
   },
 };
 
+const tokenHandler: STF<Radar> = {
+  handler: ({ inputs, state }) => {
+    const { token, criteriaCount, isSpam } = inputs;
+    if(isSpam === true){
+      return state;
+    }
+    state.tokens.push({
+      token: token,
+      criteriaCount: criteriaCount,
+      isSpam: isSpam,
+    });
+    state.tokens.sort((a, b) => a.criteriaCount - b.criteriaCount);
+    return state;
+  },
+};
 
 export const transitions: Transitions<Radar> = {
   mint: mintHandler,
+  token: tokenHandler,
 };

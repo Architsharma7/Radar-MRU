@@ -6,12 +6,14 @@ export const mintSchema = new ActionSchema("mint", {
   amountOfToken: SolidityType.UINT,
 });
 
-// export const tokenSchemas = new ActionSchema("token", {
-//   address: SolidityType.ADDRESS,
-//   criteriaCount: SolidityType.ADDRESS,
-//   amountOfToken: SolidityType.UINT,
-// });
+export const tokenSchema = new ActionSchema("token", {
+  token: SolidityType.ADDRESS,
+  criteriaCount: SolidityType.UINT,
+  isSpam: SolidityType.BOOL,
+});
+
 
 export const schemas = {
-  mint: mintSchema
+  mint: mintSchema,
+  token :tokenSchema
 };

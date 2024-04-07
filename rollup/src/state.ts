@@ -11,13 +11,26 @@ export type Leaves = {
   }[];
 }[];
 
+export type Tokens = {
+  token: string;
+  criteriaCount: number;
+  isSpam: boolean;
+}[];
+
+export type RadarVariable = {
+  leaves: Leaves;
+  tokens: Tokens;
+};
+
 export class BetterMerkleTree {
   public merkleTree: MerkleTree;
   public leaves: Leaves;
+  public tokens: Tokens;
 
-  constructor(leaves: Leaves) {
+  constructor(leaves: Leaves, tokens: Tokens) {
     this.merkleTree = this.createTree(leaves);
     this.leaves = leaves;
+    this.tokens = tokens;
   }
 
   createTree(leaves: Leaves) {
@@ -43,25 +56,28 @@ export class BetterMerkleTree {
   }
 }
 
-export class Radar extends State<Leaves, BetterMerkleTree> {
-  constructor(state: Leaves) {
+export class Radar extends State<RadarVariable, BetterMerkleTree> {
+  constructor(state: RadarVariable) {
     super(state);
   }
 
   transformer() {
     return {
       wrap: () => {
-        const newTree = new BetterMerkleTree(this.state);
+        const newTree = new BetterMerkleTree(
+          this.state.leaves,
+          this.state.tokens
+        );
         return newTree;
       },
       unwrap: (wrappedState: BetterMerkleTree) => {
-        return wrappedState.leaves;
+        return { leaves: wrappedState.leaves, tokens: wrappedState.tokens };
       },
     };
   }
 
   getRootHash(): BytesLike {
-    if (this.state.length === 0) {
+    if (this.state.leaves.length === 0) {
       return ZeroHash;
     }
     return this.transformer().wrap().merkleTree.getHexRoot();

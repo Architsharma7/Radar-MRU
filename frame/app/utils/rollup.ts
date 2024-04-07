@@ -1,4 +1,5 @@
 import { Wallet } from "ethers";
+import axios from "axios";
 
 const domain = {
   name: "Stackr MVP v0",
@@ -54,3 +55,14 @@ export const createMintActions = async(mintData:mintDataType) => {
   const json = await res.json();
   console.log(`Response: ${JSON.stringify(json, null, 2)}`);
 };
+
+
+export const getTokens = async () => {
+  const response = await axios.get(
+    `http://localhost:3001/`
+  );
+  console.log("Response",response);
+  const tokens = response.data.state.tokens;
+  console.log("Tokens",tokens);
+  return tokens;
+}

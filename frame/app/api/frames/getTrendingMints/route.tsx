@@ -3,11 +3,12 @@ import { createFrames, Button } from "frames.js/next";
 const frames = createFrames();
 
 const handleRequest = frames(async (ctx) => {
-  // const response = await fetch(`${process.env.HOST}/api/findTrending`);
+  // TODO: fix this, this is throwing JSON parse error
+  // const response = await fetch(`https://0bbc-110-235-234-28.ngrok-free.app/api/findTrending`);
   // const data = await response.json();
   // console.log(data);
-
   const data = "hello";
+  // const data = [1, 2, 3];
   const arr = [1, 2, 3];
 
   if (!data) {
@@ -55,11 +56,6 @@ const handleRequest = frames(async (ctx) => {
     return {
       image: (
         <div tw="flex h-full w-full items-center justify-center flex-col bg-[#f9f7f2] ">
-          {/* <img
-            src="https://i.ibb.co/mGQKf0t/Grid.png"
-            alt="Grid-Pattern-1711814234821"
-            tw="absolute"
-          /> */}
           <div
             style={{ fontWeight: "700", fontSize: "22px" }}
             tw="flex bg-black text-white p-4 rounded-xl rounded-tl-none"
@@ -87,13 +83,6 @@ const handleRequest = frames(async (ctx) => {
             ))}
           </div>
         </div>
-        // <img
-        //   src={
-        //     "https://pbs.twimg.com/profile_images/1732439974497394688/ezW7LwKq_400x400.jpg"
-        //   }
-        //   alt="nft"
-        //   tw="h-56 w-44 shadow-2xl border-2 border-blue-400"
-        // />
       ),
       buttons: [
         <Button
@@ -101,10 +90,10 @@ const handleRequest = frames(async (ctx) => {
           target={`https://0bbc-110-235-234-28.ngrok-free.app/api/frames/nftFrame`}
           key={"9"}
         >
-          Take me to NFT
+          Take me to Token
         </Button>,
       ],
-      textInput: "  NFT Index Number",
+      textInput: "  Token Index Number",
       accepts: [
         {
           id: "",

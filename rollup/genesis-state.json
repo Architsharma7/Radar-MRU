@@ -1,3 +1,6 @@
 {
-    "state": []
+    "state": {
+        "leaves": [],
+        "tokens": []
+    }
 }
